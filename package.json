@@ -1,0 +1,15 @@
+{
+  "name": "yt2prompt",
+  "version": "1.0.0",
+  "description": "Chrome extension to transform YouTube transcripts into AI-ready prompts",
+  "scripts": {
+    "build": "parcel build src/contentScript.js src/llmContentScript.js src/popup.js manifest.json popup.html icon.webp --dist-dir dist --public-url .",
+    "watch": "parcel watch src/contentScript.js src/popup.js prompts.json manifest.json popup.html icon.webp --dist-dir dist"
+  },
+  "dependencies": {
+    "youtube-transcript": "^1.2.1"
+  },
+  "devDependencies": {
+    "parcel": "^2.13.3"
+  }
+} 

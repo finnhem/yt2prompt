@@ -1,0 +1,36 @@
+{
+  "llmServices": [
+    {
+      "id": "deepseek",
+      "name": "DeepSeek Chat",
+      "url": "https://chat.deepseek.com/chat"
+    },
+    {
+      "id": "chatgpt",
+      "name": "ChatGPT",
+      "url": "https://chat.openai.com/"
+    },
+    {
+      "id": "claude",
+      "name": "Claude",
+      "url": "https://claude.ai/new"
+    },
+    {
+      "id": "gemini",
+      "name": "Gemini",
+      "url": "https://gemini.google.com/app"
+    }
+  ],
+  "prompts": [
+    {
+      "id": "tutorial_plan",
+      "name": "Tutorial Step-by-Step Plan",
+      "template": "You are a highly capable language model specialized in extracting actionable plans from tutorial or technical video transcripts. Your goal is to create a comprehensive, step-by-step plan that is clear, organized, and easy to follow. Ensure all steps are ordered logically, include the names of tools or applications mentioned, and provide a list of required items or resources. Format the output in Markdown, with actionable steps presented as a checklist for easy tracking.\n\n**Steps for creating the plan**:\n\n1. Analyze the transcript to understand the objective of the tutorial or technical process.\n2. Identify all necessary tools, apps, or materials required for the process.\n3. Break down the process into clear, sequential steps.\n4. Highlight any specific tips, warnings, or additional context mentioned in the video.\n5. Format each step as a checklist item in Markdown for user convenience.\n6. Provide a separate list of required items/tools at the beginning.\n\n**Expected Output Format**:\n# Step-by-Step Instructions: [Tutorial/Technical Process Name]\n\n## Required Tools and Materials\n- [Tool/App/Material 1]\n- [Tool/App/Material 2]\n- ...\n\n## Instructions\n\n1. [ ] **Step 1:** [Detailed explanation of the first step, including tools or apps required.]\n2. [ ] **Step 2:** [Detailed explanation of the second step, with relevant notes.]\n3. [ ] **Step 3:** [Detailed explanation of the third step.]\n4. [ ] **Step X:** [Continue until all steps are covered.]\n\n## Additional Tips or Notes\n- [Tip or warning 1]\n- [Tip or warning 2]\n- ...\n\n---\n\nBy presenting the steps as a checklist and including all necessary tools and materials upfront, this prompt ensures the generated plan is practical, actionable, and well-organized for technical or tutorial-based tasks.\n\n\n**Example Input**:  \nGenerate a step-by-step plan from this video transcript:\n\n{transcript}"
+    },
+    {
+      "id": "detailed_summary",
+      "name": "Detailed Summary with Context",
+      "template": "You are an advanced language model tasked with summarizing YouTube transcripts. Your goal is to create a concise and comprehensive summary of the content while retaining the original wording wherever it adds meaning or emphasis. Avoid oversimplifying the information, and ensure that the summary accurately reflects the nuances of the transcript. Format the output in Markdown for clarity and readability.\n\n**Steps for summarization**:\n\n1. Analyze the provided transcript thoroughly to understand its main themes and subtopics.\n2. Identify key points, significant details, and contextual elements that contribute to the overall message.\n3. Retain direct quotes or specific phrases that enhance understanding or carry unique value.\n4. Organize the summary in Markdown, using bullet points, headings, and sections as necessary.\n5. Ensure the final summary reflects the tone and intent of the original transcript.\n   \n**Transcript**:\n\n{transcript}"
+    }
+  ]
+} 

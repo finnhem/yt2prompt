@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>YouTube Transcript</title>
+  <style>
+    body {
+      width: 400px;
+      padding: 10px;
+      font-family: Arial, sans-serif;
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+      margin: 0;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    #transcript-container {
+      max-height: 400px;
+      overflow-y: auto;
+      margin: 10px 0;
+      background-color: #2a2a2a;
+      padding: 12px;
+      border-radius: 8px;
+      line-height: 1.5;
+    }
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #888;
+    }
+    .error {
+      color: #ff6b6b;
+      padding: 10px;
+      background-color: #2a2a2a;
+      border-radius: 4px;
+    }
+    .button {
+      background: #2f81f7;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 8px;
+      transition: background-color 0.2s;
+    }
+    .button:hover {
+      background: #4893f7;
+    }
+    .button:disabled {
+      background: #2a2a2a;
+      color: #666;
+      cursor: not-allowed;
+    }
+    #prompt-select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      border: 1px solid #404040;
+      background-color: #2a2a2a;
+      color: #e0e0e0;
+      appearance: none;
+      cursor: pointer;
+      outline: none;
+    }
+    #prompt-select:focus {
+      border-color: #2f81f7;
+    }
+    .button-container {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .llm-container {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .llm-select {
+      flex: 1;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #404040;
+      background-color: #2a2a2a;
+      color: #e0e0e0;
+      appearance: none;
+      cursor: pointer;
+      outline: none;
+    }
+    .llm-select:focus {
+      border-color: #2f81f7;
+    }
+    .llm-select:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    /* Custom scrollbar for webkit browsers */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #2a2a2a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #404040;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #4a4a4a;
+    }
+  </style>
+</head>
+<body>
+  <select id="prompt-select">
+    <option value="">Select a prompt template...</option>
+  </select>
+  <div id="transcript-container">
+    <div class="loading">Loading transcript...</div>
+  </div>
+  <div class="button-container">
+    <button id="copyButton" class="button" disabled>Copy Transcript</button>
+    <button id="copyWithPromptButton" class="button" disabled>Copy with Prompt</button>
+  </div>
+  <div class="llm-container">
+    <select id="llm-select" class="llm-select" disabled>
+      <option value="">Select AI Service...</option>
+    </select>
+    <button id="openLLMButton" class="button" disabled>Open in AI Chat</button>
+  </div>
+  <script src="dist/popup.js"></script>
+</body>
+</html> 

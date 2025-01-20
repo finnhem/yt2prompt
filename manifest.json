@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "YT2Prompt",
+  "version": "1.0",
+  "description": "Transform YouTube transcripts into AI-ready prompts",
+  "icons": {
+    "16": "icon.webp",
+    "32": "icon.webp",
+    "48": "icon.webp",
+    "128": "icon.webp"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon.webp",
+      "32": "icon.webp",
+      "48": "icon.webp",
+      "128": "icon.webp"
+    }
+  },
+  "permissions": ["activeTab", "storage", "unlimitedStorage"],
+  "host_permissions": [
+    "*://*.youtube.com/*",
+    "https://chat.deepseek.com/*",
+    "https://chat.openai.com/*",
+    "https://claude.ai/*",
+    "https://gemini.google.com/*"
+  ],
+  "content_scripts": [{
+    "matches": ["*://*.youtube.com/watch?v=*"],
+    "js": ["dist/contentScript.js"]
+  }, {
+    "matches": [
+      "https://chat.deepseek.com/*",
+      "https://chat.openai.com/*",
+      "https://claude.ai/*",
+      "https://gemini.google.com/*"
+    ],
+    "js": ["dist/llmContentScript.js"]
+  }],
+  "web_accessible_resources": [{
+    "resources": ["prompts.json"],
+    "matches": ["<all_urls>"]
+  }]
+} 
