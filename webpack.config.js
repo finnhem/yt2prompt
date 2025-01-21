@@ -3,10 +3,10 @@ const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
-    popup: './src/popup.js',
-    contentScript: './src/contentScript.js',
-    llmContentScript: './src/llmContentScript.js',
-    background: './src/background.js'
+    popup: './src/popup.ts',
+    contentScript: './src/contentScript.ts',
+    llmContentScript: './src/llmContentScript.ts',
+    background: './src/background.ts'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -16,12 +16,15 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|ts)$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
+            presets: [
+              '@babel/preset-env',
+              '@babel/preset-typescript'
+            ]
           }
         }
       },
@@ -35,7 +38,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.js', '.json', '.xml'],
+    extensions: ['.ts', '.js', '.json', '.xml'],
     modules: [path.resolve(__dirname, 'src'), 'node_modules', path.resolve(__dirname)]
   },
   plugins: [
@@ -51,23 +54,30 @@ module.exports = {
               type: 'module'
             };
             manifest.web_accessible_resources = [{
-              resources: ['prompts.json', 'prompts/*.xml'],
+              resources: ['config.json', 'prompts/*.xml'],
               matches: ['<all_urls>']
             }];
             return JSON.stringify(manifest, null, 2);
           }
         },
         { 
-          from: 'prompts.json',
-          to: 'prompts.json',
+          from: 'config.json',
+          to: 'config.json',
           transform(content) {
             // Validate JSON structure
             const data = JSON.parse(content);
-            console.log('Copying prompts.json:', data);
+            console.log('Copying config.json:', data);
             return JSON.stringify(data, null, 2);
           }
         },
-        { from: 'icon.png', to: 'icon.png' },
+        { 
+          from: 'icons',
+          to: 'icons',
+          globOptions: {
+            ignore: ['**/.DS_Store', '**/icon.png', '**/icon.webp'],
+            patterns: ['**/icon{16,48,128}.png']
+          }
+        },
         { 
           from: 'prompts',
           to: 'prompts',

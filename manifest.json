@@ -4,12 +4,17 @@
   "version": "1.0",
   "description": "Transform YouTube transcripts into AI-ready prompts",
   "icons": {
-    "48": "icon.png",
-    "128": "icon.png"
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
   },
   "action": {
     "default_popup": "popup.html",
-    "default_icon": "icon.png"
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
   },
   "permissions": ["activeTab", "storage", "unlimitedStorage"],
   "host_permissions": [
@@ -32,7 +37,7 @@
     "js": ["llmContentScript.js"]
   }],
   "web_accessible_resources": [{
-    "resources": ["prompts.json", "prompts/*.xml"],
+    "resources": ["config.json", "prompts/*.xml"],
     "matches": ["<all_urls>"]
   }]
 } 
