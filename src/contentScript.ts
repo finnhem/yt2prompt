@@ -1,4 +1,4 @@
-import { VideoChangedMessage } from './types';
+import type { VideoChangedMessage } from './types';
 
 function getVideoId(): string | null {
   const urlParams = new URLSearchParams(window.location.search);

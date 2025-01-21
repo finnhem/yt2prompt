@@ -20,6 +20,7 @@ TypeScript Usage:
 Build Tools and Configuration:
 - Use rspack for modern, fast bundling with TypeScript support
 - Configure SWC for optimal TypeScript transpilation
+- Use Biome for code formatting, linting, and import sorting
 - Handle static assets through direct file copying in rspack plugins:
   * Use Node's fs module for reliable binary file handling
   * Maintain original file structure and integrity
@@ -33,6 +34,14 @@ Build Tools and Configuration:
   * Set appropriate targets for browser compatibility
   * Use afterEmit hook for static file operations
   * Handle binary files without transformation
+
+Code Quality and Formatting:
+- Use Biome for consistent code formatting and linting
+- Follow Biome's recommended rules for TypeScript/JavaScript
+- Enforce consistent import sorting
+- Maintain strict code style through Biome's configuration
+- Use biome.json for project-wide formatting rules
+- Run Biome checks before commits to ensure code quality
 
 Extension Architecture:
 - Implement a clear separation of concerns between different extension components

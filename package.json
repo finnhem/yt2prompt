@@ -8,12 +8,19 @@
     "watch": "rspack watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "type-check": "tsc --noEmit",
-    "type-check:watch": "tsc --noEmit --watch"
+    "type-check:watch": "tsc --noEmit --watch",
+    "format": "biome format .",
+    "format:check": "biome format . --check",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint . --apply",
+    "check": "biome check .",
+    "check:fix": "biome check . --apply"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@rspack/cli": "^1.2.0",
     "@rspack/core": "^1.2.0",
     "@swc/core": "^1.4.2",

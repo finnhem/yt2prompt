@@ -1,7 +1,7 @@
 import { YoutubeTranscript } from 'youtube-transcript';
 import { 
-  PromptsConfig, 
-  ExtensionStorage, 
+  type PromptsConfig, 
+  type ExtensionStorage, 
   PromptTemplate, 
   LLMService 
 } from './types';
@@ -110,7 +110,7 @@ async function populatePromptSelect(): Promise<void> {
     // Clear existing options
     select.innerHTML = '<option value="">Select a prompt template...</option>';
     
-    config.prompts.forEach(prompt => {
+    for (const prompt of config.prompts) {
       console.log('Adding prompt:', prompt);
       const option = document.createElement('option');
       option.value = prompt.id;
@@ -119,7 +119,7 @@ async function populatePromptSelect(): Promise<void> {
         option.selected = true;
       }
       select.appendChild(option);
-    });
+    }
     
     select.addEventListener('change', async (event) => {
       const target = event.target as HTMLSelectElement;
@@ -170,7 +170,7 @@ async function populateLLMSelect(): Promise<void> {
     const config = await loadConfig();
     const lastSelected = await getLastSelectedLLM();
     
-    config.llmServices.forEach(service => {
+    for (const service of config.llmServices) {
       const option = document.createElement('option');
       option.value = service.id;
       option.textContent = service.name;
@@ -178,7 +178,7 @@ async function populateLLMSelect(): Promise<void> {
         option.selected = true;
       }
       select.appendChild(option);
-    });
+    }
     
     select.addEventListener('change', (event) => {
       const target = event.target as HTMLSelectElement;
