@@ -28,7 +28,7 @@
   ],
   "content_scripts": [{
     "matches": ["*://*.youtube.com/watch?v=*"],
-    "js": ["dist/contentScript.js"]
+    "js": ["contentScript.js"]
   }, {
     "matches": [
       "https://chat.deepseek.com/*",
@@ -36,10 +36,10 @@
       "https://claude.ai/*",
       "https://gemini.google.com/*"
     ],
-    "js": ["dist/llmContentScript.js"]
+    "js": ["llmContentScript.js"]
   }],
   "web_accessible_resources": [{
-    "resources": ["prompts.json"],
+    "resources": ["prompts.json", "prompts/*.xml"],
     "matches": ["<all_urls>"]
   }]
 } 

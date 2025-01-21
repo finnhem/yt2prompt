@@ -1,15 +1,25 @@
 {
   "name": "yt2prompt",
   "version": "1.0.0",
-  "description": "Chrome extension to transform YouTube transcripts into AI-ready prompts",
+  "description": "A Chrome extension that transforms YouTube transcripts into AI-ready prompts. Easily analyze video content with various AI services using predefined prompt templates.",
+  "main": "index.js",
   "scripts": {
-    "build": "parcel build src/contentScript.js src/llmContentScript.js src/popup.js manifest.json popup.html icon.webp --dist-dir dist --public-url .",
-    "watch": "parcel watch src/contentScript.js src/popup.js prompts.json manifest.json popup.html icon.webp --dist-dir dist"
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "babel-loader": "^9.2.1",
+    "copy-webpack-plugin": "^12.0.0",
+    "webpack": "^5.90.0",
+    "webpack-cli": "^5.1.4"
   },
   "dependencies": {
     "youtube-transcript": "^1.2.1"
-  },
-  "devDependencies": {
-    "parcel": "^2.13.3"
   }
-} 
+}

@@ -22,6 +22,19 @@
       padding: 12px;
       border-radius: 8px;
       line-height: 1.5;
+      font-size: 14px;
+    }
+    #transcript-container pre {
+      margin: 0;
+      padding: 0;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+      line-height: 1.6;
+    }
+    #transcript-container p {
+      margin: 0;
+      padding: 0;
     }
     .loading {
       text-align: center;
@@ -128,6 +141,6 @@
     </select>
     <button id="openLLMButton" class="button" disabled>Open in AI Chat</button>
   </div>
-  <script src="dist/popup.js"></script>
+  <script src="popup.js"></script>
 </body>
 </html> 

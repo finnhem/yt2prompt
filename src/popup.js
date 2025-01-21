@@ -1,5 +1,23 @@
 import { YoutubeTranscript } from 'youtube-transcript';
-import prompts from '/prompts.json';
+
+// Load prompts.json using chrome.runtime.getURL
+async function loadPrompts() {
+  try {
+    const promptsUrl = chrome.runtime.getURL('prompts.json');
+    console.log('Attempting to load prompts from:', promptsUrl);
+    const response = await fetch(promptsUrl);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log('Successfully loaded prompts:', data);
+    return data;
+  } catch (error) {
+    console.error('Failed to load prompts:', error);
+    console.error('Stack trace:', error.stack);
+    return { prompts: [], llmServices: [] };
+  }
+}
 
 async function saveLastSelectedPrompt(promptId) {
   await chrome.storage.local.set({ lastSelectedPrompt: promptId });
@@ -43,25 +61,67 @@ async function copyToClipboard(text) {
   }
 }
 
+async function updatePreviewContent(container, transcriptText, promptId) {
+  if (promptId) {
+    const template = await getPromptTemplate(promptId);
+    if (template) {
+      // Extract content from XML between <content> tags
+      const contentMatch = template.match(/<content>([\s\S]*?)<\/content>/);
+      const templateContent = contentMatch ? contentMatch[1].trim() : template;
+      
+      // Replace transcript placeholder and preserve whitespace
+      const formattedContent = templateContent
+        .replace('{{transcript}}', transcriptText)
+        .replace(/\n/g, '<br>')
+        .replace(/ {2,}/g, space => '&nbsp;'.repeat(space.length));
+      
+      container.innerHTML = `<pre style="white-space: pre-wrap; word-wrap: break-word; font-family: monospace;">${formattedContent}</pre>`;
+      return;
+    }
+  }
+  container.innerHTML = `<p style="white-space: pre-wrap; word-wrap: break-word;">${transcriptText}</p>`;
+}
+
 async function populatePromptSelect() {
   const select = document.getElementById('prompt-select');
-  console.log('Available prompts:', prompts);
-  const lastSelected = await getLastSelectedPrompt();
-  
-  prompts.prompts.forEach(prompt => {
-    console.log('Adding prompt:', prompt.name);
-    const option = document.createElement('option');
-    option.value = prompt.id;
-    option.textContent = prompt.name;
-    if (prompt.id === lastSelected) {
-      option.selected = true;
+  try {
+    console.log('Starting to populate prompt select');
+    const prompts = await loadPrompts();
+    console.log('Available prompts:', prompts);
+    
+    if (!prompts || !prompts.prompts || !Array.isArray(prompts.prompts)) {
+      console.error('Invalid prompts data structure:', prompts);
+      throw new Error('Invalid prompts data structure');
     }
-    select.appendChild(option);
-  });
-  
-  select.addEventListener('change', (event) => {
-    saveLastSelectedPrompt(event.target.value);
-  });
+    
+    const lastSelected = await getLastSelectedPrompt();
+    console.log('Last selected prompt:', lastSelected);
+    
+    // Clear existing options
+    select.innerHTML = '<option value="">Select a prompt template...</option>';
+    
+    prompts.prompts.forEach(prompt => {
+      console.log('Adding prompt:', prompt);
+      const option = document.createElement('option');
+      option.value = prompt.id;
+      option.textContent = prompt.name;
+      if (prompt.id === lastSelected) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+    
+    select.addEventListener('change', async (event) => {
+      console.log('Prompt selection changed:', event.target.value);
+      saveLastSelectedPrompt(event.target.value);
+      const container = document.getElementById('transcript-container');
+      await updatePreviewContent(container, container.dataset.transcriptText || '', event.target.value);
+    });
+  } catch (error) {
+    console.error('Error populating prompt select:', error);
+    console.error('Stack trace:', error.stack);
+    select.innerHTML = '<option value="">Error loading prompts</option>';
+  }
 }
 
 async function openLLMService(serviceUrl, text) {
@@ -87,21 +147,47 @@ async function openLLMService(serviceUrl, text) {
 
 async function populateLLMSelect() {
   const select = document.getElementById('llm-select');
-  const lastSelected = await getLastSelectedLLM();
+  try {
+    const prompts = await loadPrompts();
+    const lastSelected = await getLastSelectedLLM();
+    
+    prompts.llmServices.forEach(service => {
+      const option = document.createElement('option');
+      option.value = service.id;
+      option.textContent = service.name;
+      if (service.id === lastSelected) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+    
+    select.addEventListener('change', (event) => {
+      saveLastSelectedLLM(event.target.value);
+    });
+  } catch (error) {
+    console.error('Error populating LLM select:', error);
+    select.innerHTML = '<option value="">Error loading services</option>';
+  }
+}
+
+async function loadXMLTemplate(templatePath) {
+  try {
+    const response = await fetch(chrome.runtime.getURL(templatePath));
+    const xmlText = await response.text();
+    return xmlText; // Return the entire XML content as is
+  } catch (error) {
+    console.error('Failed to load XML template:', error);
+    return null;
+  }
+}
+
+async function getPromptTemplate(promptId) {
+  const selectedPrompt = await loadPrompts().then(prompts => prompts.prompts.find(p => p.id === promptId));
+  if (!selectedPrompt) return null;
   
-  prompts.llmServices.forEach(service => {
-    const option = document.createElement('option');
-    option.value = service.id;
-    option.textContent = service.name;
-    if (service.id === lastSelected) {
-      option.selected = true;
-    }
-    select.appendChild(option);
-  });
-  
-  select.addEventListener('change', (event) => {
-    saveLastSelectedLLM(event.target.value);
-  });
+  const template = await loadXMLTemplate(selectedPrompt.templatePath);
+  console.log(template);
+  return template;
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -114,6 +200,21 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   await populatePromptSelect();
   await populateLLMSelect();
+
+  // Store transcript text in a data attribute to preserve raw text
+  const setTranscriptText = async (text) => {
+    transcriptText = text;
+    container.dataset.transcriptText = text;
+    const selectedPromptId = document.getElementById('prompt-select').value;
+    await updatePreviewContent(container, text, selectedPromptId);
+  };
+  
+  // Update prompt select to use stored transcript text
+  const select = document.getElementById('prompt-select');
+  select.addEventListener('change', async (event) => {
+    saveLastSelectedPrompt(event.target.value);
+    await updatePreviewContent(container, container.dataset.transcriptText || '', event.target.value);
+  });
   
   openLLMButton.addEventListener('click', async () => {
     const selectedLLMId = llmSelect.value;
@@ -126,13 +227,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     let textToSend = transcriptText;
     
     if (selectedPromptId) {
-      const selectedPrompt = prompts.prompts.find(p => p.id === selectedPromptId);
-      if (selectedPrompt) {
-        textToSend = selectedPrompt.template.replace('{transcript}', transcriptText);
+      const template = await getPromptTemplate(selectedPromptId);
+      if (template) {
+        textToSend = template.replace('{{transcript}}', transcriptText);
       }
     }
     
-    const selectedService = prompts.llmServices.find(s => s.id === selectedLLMId);
+    const selectedService = await loadPrompts().then(prompts => prompts.llmServices.find(s => s.id === selectedLLMId));
     if (selectedService) {
       await openLLMService(selectedService.url, textToSend);
     }
@@ -146,8 +247,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       throw new Error('No YouTube video detected');
     }
 
-    transcriptText = await getTranscript(videoId);
-    container.innerHTML = `<p>${transcriptText}</p>`;
+    const text = await getTranscript(videoId);
+    await setTranscriptText(text);
     copyButton.disabled = false;
     copyWithPromptButton.disabled = false;
     llmSelect.disabled = false;
@@ -169,9 +270,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
       let textToCopy = transcriptText;
       
-      const selectedPrompt = prompts.prompts.find(p => p.id === selectedPromptId);
-      if (selectedPrompt) {
-        textToCopy = selectedPrompt.template.replace('{transcript}', transcriptText);
+      const template = await getPromptTemplate(selectedPromptId);
+      if (template) {
+        textToCopy = template.replace('{{transcript}}', transcriptText);
       }
       
       const success = await copyToClipboard(textToCopy);

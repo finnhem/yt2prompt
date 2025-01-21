@@ -11,8 +11,7 @@ dist/
 .idea/
 *.swp
 *.swo
-.DS_Store
-Thumbs.db
+.DS_StoreThumbs.db
 
 # Logs
 *.log
@@ -28,3 +27,5 @@ yarn-error.log*
 # Chrome Extension specific
 *.pem
 *.crx 
+
+debug*.md
