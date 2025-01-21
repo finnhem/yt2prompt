@@ -1,5 +1,5 @@
 import { YoutubeTranscript } from 'youtube-transcript';
-import { type PromptsConfig, type ExtensionStorage, PromptTemplate, LLMService } from './types';
+import { type ExtensionStorage, LLMService, PromptTemplate, type PromptsConfig } from './types';
 
 // Load extension configuration using chrome.runtime.getURL
 async function loadConfig(): Promise<PromptsConfig> {
