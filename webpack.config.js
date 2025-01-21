@@ -67,7 +67,7 @@ module.exports = {
             return JSON.stringify(data, null, 2);
           }
         },
-        { from: 'icon.webp', to: 'icon.webp' },
+        { from: 'icon.png', to: 'icon.png' },
         { 
           from: 'prompts',
           to: 'prompts',

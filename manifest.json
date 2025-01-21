@@ -4,19 +4,12 @@
   "version": "1.0",
   "description": "Transform YouTube transcripts into AI-ready prompts",
   "icons": {
-    "16": "icon.webp",
-    "32": "icon.webp",
-    "48": "icon.webp",
-    "128": "icon.webp"
+    "48": "icon.png",
+    "128": "icon.png"
   },
   "action": {
     "default_popup": "popup.html",
-    "default_icon": {
-      "16": "icon.webp",
-      "32": "icon.webp",
-      "48": "icon.webp",
-      "128": "icon.webp"
-    }
+    "default_icon": "icon.png"
   },
   "permissions": ["activeTab", "storage", "unlimitedStorage"],
   "host_permissions": [

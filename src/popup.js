@@ -233,6 +233,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     }
     
+    // Copy to clipboard
+    const success = await copyToClipboard(textToSend);
+    if (success) {
+      openLLMButton.textContent = 'Copied!';
+      setTimeout(() => {
+        openLLMButton.textContent = 'Open in AI Chat';
+      }, 2000);
+    }
+    
     const selectedService = await loadPrompts().then(prompts => prompts.llmServices.find(s => s.id === selectedLLMId));
     if (selectedService) {
       await openLLMService(selectedService.url, textToSend);

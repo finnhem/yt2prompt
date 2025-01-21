@@ -1,41 +1,38 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<prompt-template>
-    <purpose>
-        Transform tutorial or technical video transcripts into clear, organized, and actionable step-by-step plans that are easy to follow. The output should include all necessary tools, materials, and sequential instructions with additional context and tips.
-    </purpose>
+<purpose>
+    Transform tutorial or technical video transcripts into clear, organized, and actionable step-by-step plans that are easy to follow. The output should include all necessary tools, materials, and sequential instructions with additional context and tips.
+</purpose>
 
-    <instructions>
-        <instruction>Analyze the transcript to understand the tutorial's objective</instruction>
-        <instruction>Identify all necessary tools, apps, or materials required</instruction>
-        <instruction>Break down the process into clear, sequential steps</instruction>
-        <instruction>Highlight specific tips, warnings, or additional context</instruction>
-        <instruction>Format each step as a checklist item in Markdown</instruction>
-        <instruction>Provide a separate list of required items/tools at the beginning</instruction>
-        <instruction>Output in Markdown format</instruction>
-    </instructions>
+<instructions>
+    <instruction>Analyze the transcript to understand the tutorial's objective</instruction>
+    <instruction>Identify all necessary tools, apps, or materials required</instruction>
+    <instruction>Break down the process into clear, sequential steps</instruction>
+    <instruction>Highlight specific tips, warnings, or additional context</instruction>
+    <instruction>Format each step as a checklist item in Markdown</instruction>
+    <instruction>Provide a separate list of required items/tools at the beginning</instruction>
+    <instruction>Output in Markdown format</instruction>
+</instructions>
 
-    <example-output>
-        # Step-by-Step Instructions: [Tutorial/Technical Process Name]
+<example-output>
+    # Step-by-Step Instructions: [Tutorial/Technical Process Name]
 
-        ## Required Tools and Materials
-        - [Tool/App/Material 1]
-        - [Tool/App/Material 2]
-        - ...
+    ## Required Tools and Materials
+    - [Tool/App/Material 1]
+    - [Tool/App/Material 2]
+    - ...
 
-        ## Instructions
+    ## Instructions
 
-        1. [ ] **Step 1:** [Detailed explanation of the first step, including tools or apps required.]
-        2. [ ] **Step 2:** [Detailed explanation of the second step, with relevant notes.]
-        3. [ ] **Step 3:** [Detailed explanation of the third step.]
-        4. [ ] **Step X:** [Continue until all steps are covered.]
+    1. [ ] **Step 1:** [Detailed explanation of the first step, including tools or apps required.]
+    2. [ ] **Step 2:** [Detailed explanation of the second step, with relevant notes.]
+    3. [ ] **Step 3:** [Detailed explanation of the third step.]
+    4. [ ] **Step X:** [Continue until all steps are covered.]
 
-        ## Additional Tips or Notes
-        - [Tip or warning 1]
-        - [Tip or warning 2]
-        - ...
-    </example-output>
+    ## Additional Tips or Notes
+    - [Tip or warning 1]
+    - [Tip or warning 2]
+    - ...
+</example-output>
 
-    <content>
-        {{transcript}}
-    </content>
-</prompt-template>
+<content>
+    {{transcript}}
+</content>

@@ -1,45 +1,42 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<prompt-template>
-    <purpose>
-        Create a concise yet comprehensive summary of YouTube video content while preserving important context, nuances, and original wording where it adds meaning or emphasis. The summary should be well-structured and maintain the depth of the original content.
-    </purpose>
+<purpose>
+    Create a concise yet comprehensive summary of YouTube video content while preserving important context, nuances, and original wording where it adds meaning or emphasis. The summary should be well-structured and maintain the depth of the original content.
+</purpose>
 
-    <instructions>
-        <instruction>Analyze the transcript thoroughly to identify main themes and subtopics</instruction>
-        <instruction>Extract key points, significant details, and contextual elements</instruction>
-        <instruction>Preserve direct quotes or specific phrases that carry unique value</instruction>
-        <instruction>Organize the content using clear Markdown structure</instruction>
-        <instruction>Maintain the original tone and intent of the content</instruction>
-        <instruction>Use headings, bullet points, and sections for clarity</instruction>
-        <instruction>Output in Markdown format</instruction>
-    </instructions>
+<instructions>
+    <instruction>Analyze the transcript thoroughly to identify main themes and subtopics</instruction>
+    <instruction>Extract key points, significant details, and contextual elements</instruction>
+    <instruction>Preserve direct quotes or specific phrases that carry unique value</instruction>
+    <instruction>Organize the content using clear Markdown structure</instruction>
+    <instruction>Maintain the original tone and intent of the content</instruction>
+    <instruction>Use headings, bullet points, and sections for clarity</instruction>
+    <instruction>Output in Markdown format</instruction>
+</instructions>
 
-    <example-output>
-        # Video Summary: [Title]
+<example-output>
+    # Video Summary: [Title]
 
-        ## Key Points
-        - Main point 1 with supporting context
-        - Main point 2 with supporting context
-        - ...
+    ## Key Points
+    - Main point 1 with supporting context
+    - Main point 2 with supporting context
+    - ...
 
-        ## Important Details
-        - Significant detail 1
-        - Significant detail 2
-        - ...
+    ## Important Details
+    - Significant detail 1
+    - Significant detail 2
+    - ...
 
-        ## Notable Quotes
-        &gt; "Direct quote that adds value to understanding"
+    ## Notable Quotes
+    &gt; "Direct quote that adds value to understanding"
 
-        ## Additional Context
-        - Contextual element 1
-        - Contextual element 2
-        - ...
+    ## Additional Context
+    - Contextual element 1
+    - Contextual element 2
+    - ...
 
-        ## Summary
-        [Comprehensive summary paragraph that ties everything together while maintaining the original tone and intent]
-    </example-output>
+    ## Summary
+    [Comprehensive summary paragraph that ties everything together while maintaining the original tone and intent]
+</example-output>
 
-    <content>
-        {{transcript}}
-    </content>
-</prompt-template>
+<content>
+    {{transcript}}
+</content>
