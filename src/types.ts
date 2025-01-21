@@ -1,5 +1,5 @@
 // Message types for communication between different parts of the extension
-export type MessageType = 
+export type MessageType =
   | 'VIDEO_CHANGED'
   | 'GET_TRANSCRIPT'
   | 'TRANSCRIPT_READY'
@@ -37,11 +37,7 @@ export interface ApplyPromptMessage extends BaseMessage {
 }
 
 // Union type of all possible messages
-export type Message = 
-  | VideoChangedMessage 
-  | TranscriptMessage 
-  | ErrorMessage 
-  | ApplyPromptMessage;
+export type Message = VideoChangedMessage | TranscriptMessage | ErrorMessage | ApplyPromptMessage;
 
 // Transcript entry structure
 export interface TranscriptEntry {
@@ -93,8 +89,8 @@ export interface PasteTextResponse {
   success: boolean;
 }
 
-export type LLMServiceHostname = 
+export type LLMServiceHostname =
   | 'chat.deepseek.com'
   | 'chat.openai.com'
   | 'claude.ai'
-  | 'gemini.google.com'; 
+  | 'gemini.google.com';

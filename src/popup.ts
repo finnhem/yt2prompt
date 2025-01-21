@@ -1,10 +1,5 @@
 import { YoutubeTranscript } from 'youtube-transcript';
-import { 
-  type PromptsConfig, 
-  type ExtensionStorage, 
-  PromptTemplate, 
-  LLMService 
-} from './types';
+import { type PromptsConfig, type ExtensionStorage, PromptTemplate, LLMService } from './types';
 
 // Load extension configuration using chrome.runtime.getURL
 async function loadConfig(): Promise<PromptsConfig> {
@@ -30,7 +25,7 @@ async function saveLastSelectedPrompt(promptId: string): Promise<void> {
 }
 
 async function getLastSelectedPrompt(): Promise<string> {
-  const result = await chrome.storage.local.get(['lastSelectedPrompt']) as ExtensionStorage;
+  const result = (await chrome.storage.local.get(['lastSelectedPrompt'])) as ExtensionStorage;
   return result.lastSelectedPrompt || '';
 }
 
@@ -39,7 +34,7 @@ async function saveLastSelectedLLM(llmId: string): Promise<void> {
 }
 
 async function getLastSelectedLLM(): Promise<string> {
-  const result = await chrome.storage.local.get(['lastSelectedLLM']) as ExtensionStorage;
+  const result = (await chrome.storage.local.get(['lastSelectedLLM'])) as ExtensionStorage;
   return result.lastSelectedLLM || '';
 }
 
@@ -51,7 +46,7 @@ async function getCurrentTab(): Promise<chrome.tabs.Tab> {
 async function getTranscript(videoId: string): Promise<string> {
   try {
     const transcript = await YoutubeTranscript.fetchTranscript(videoId);
-    return transcript.map(entry => entry.text).join(' ');
+    return transcript.map((entry) => entry.text).join(' ');
   } catch (error) {
     throw new Error('Unable to fetch transcript. The video might not have captions available.');
   }
@@ -68,8 +63,8 @@ async function copyToClipboard(text: string): Promise<boolean> {
 }
 
 async function updatePreviewContent(
-  container: HTMLElement, 
-  transcriptText: string, 
+  container: HTMLElement,
+  transcriptText: string,
   promptId: string
 ): Promise<void> {
   if (promptId) {
@@ -78,13 +73,13 @@ async function updatePreviewContent(
       // Extract content from XML between <content> tags
       const contentMatch = template.match(/<content>([\s\S]*?)<\/content>/);
       const templateContent = contentMatch ? contentMatch[1].trim() : template;
-      
+
       // Replace transcript placeholder and preserve whitespace
       const formattedContent = templateContent
         .replace('{{transcript}}', transcriptText)
         .replace(/\n/g, '<br>')
-        .replace(/ {2,}/g, space => '&nbsp;'.repeat(space.length));
-      
+        .replace(/ {2,}/g, (space) => '&nbsp;'.repeat(space.length));
+
       container.innerHTML = `<pre style="white-space: pre-wrap; word-wrap: break-word; font-family: monospace;">${formattedContent}</pre>`;
       return;
     }
@@ -98,18 +93,18 @@ async function populatePromptSelect(): Promise<void> {
     console.log('Starting to populate prompt select');
     const config = await loadConfig();
     console.log('Available prompts:', config);
-    
+
     if (!config || !config.prompts || !Array.isArray(config.prompts)) {
       console.error('Invalid configuration structure:', config);
       throw new Error('Invalid configuration structure');
     }
-    
+
     const lastSelected = await getLastSelectedPrompt();
     console.log('Last selected prompt:', lastSelected);
-    
+
     // Clear existing options
     select.innerHTML = '<option value="">Select a prompt template...</option>';
-    
+
     for (const prompt of config.prompts) {
       console.log('Adding prompt:', prompt);
       const option = document.createElement('option');
@@ -120,18 +115,14 @@ async function populatePromptSelect(): Promise<void> {
       }
       select.appendChild(option);
     }
-    
+
     select.addEventListener('change', async (event) => {
       const target = event.target as HTMLSelectElement;
       console.log('Prompt selection changed:', target.value);
       await saveLastSelectedPrompt(target.value);
       const container = document.getElementById('transcript-container');
       if (container) {
-        await updatePreviewContent(
-          container, 
-          container.dataset.transcriptText || '', 
-          target.value
-        );
+        await updatePreviewContent(container, container.dataset.transcriptText || '', target.value);
       }
     });
   } catch (error) {
@@ -144,14 +135,14 @@ async function populatePromptSelect(): Promise<void> {
 async function openLLMService(serviceUrl: string, text: string): Promise<void> {
   // Open the LLM service in a new tab and wait for it to load
   const tab = await chrome.tabs.create({ url: serviceUrl });
-  
+
   // Wait for the page to load and then send the text
   const pasteText = async () => {
     try {
       if (tab.id) {
-        await chrome.tabs.sendMessage(tab.id, { 
+        await chrome.tabs.sendMessage(tab.id, {
           action: 'pasteText',
-          text: text 
+          text: text,
         });
       }
     } catch (error) {
@@ -159,7 +150,7 @@ async function openLLMService(serviceUrl: string, text: string): Promise<void> {
       setTimeout(pasteText, 1000);
     }
   };
-  
+
   // Start trying to paste after a short delay to allow the page to load
   setTimeout(pasteText, 2000);
 }
@@ -169,7 +160,7 @@ async function populateLLMSelect(): Promise<void> {
   try {
     const config = await loadConfig();
     const lastSelected = await getLastSelectedLLM();
-    
+
     for (const service of config.llmServices) {
       const option = document.createElement('option');
       option.value = service.id;
@@ -179,7 +170,7 @@ async function populateLLMSelect(): Promise<void> {
       }
       select.appendChild(option);
     }
-    
+
     select.addEventListener('change', (event) => {
       const target = event.target as HTMLSelectElement;
       saveLastSelectedLLM(target.value);
@@ -203,9 +194,9 @@ async function loadXMLTemplate(templatePath: string): Promise<string | null> {
 
 async function getPromptTemplate(promptId: string): Promise<string | null> {
   const config = await loadConfig();
-  const selectedPrompt = config.prompts.find(p => p.id === promptId);
+  const selectedPrompt = config.prompts.find((p) => p.id === promptId);
   if (!selectedPrompt) return null;
-  
+
   const template = await loadXMLTemplate(selectedPrompt.templatePath);
   console.log(template);
   return template;
@@ -218,7 +209,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const llmSelect = document.getElementById('llm-select') as HTMLSelectElement;
   const openLLMButton = document.getElementById('openLLMButton') as HTMLButtonElement;
   let transcriptText = '';
-  
+
   await populatePromptSelect();
   await populateLLMSelect();
 
@@ -229,7 +220,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const promptSelect = document.getElementById('prompt-select') as HTMLSelectElement;
     await updatePreviewContent(container, text, promptSelect.value);
   };
-  
+
   // Update prompt select to use stored transcript text
   const select = document.getElementById('prompt-select') as HTMLSelectElement;
   select.addEventListener('change', async (event) => {
@@ -237,25 +228,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     await saveLastSelectedPrompt(target.value);
     await updatePreviewContent(container, container.dataset.transcriptText || '', target.value);
   });
-  
+
   openLLMButton.addEventListener('click', async () => {
     const selectedLLMId = llmSelect.value;
     if (!selectedLLMId) {
       alert('Please select an AI service first');
       return;
     }
-    
+
     const promptSelect = document.getElementById('prompt-select') as HTMLSelectElement;
     const selectedPromptId = promptSelect.value;
     let textToSend = transcriptText;
-    
+
     if (selectedPromptId) {
       const template = await getPromptTemplate(selectedPromptId);
       if (template) {
         textToSend = template.replace('{{transcript}}', transcriptText);
       }
     }
-    
+
     // Copy to clipboard
     const success = await copyToClipboard(textToSend);
     if (success) {
@@ -264,9 +255,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         openLLMButton.textContent = 'Open in AI Chat';
       }, 2000);
     }
-    
+
     const config = await loadConfig();
-    const selectedService = config.llmServices.find(s => s.id === selectedLLMId);
+    const selectedService = config.llmServices.find((s) => s.id === selectedLLMId);
     if (selectedService) {
       await openLLMService(selectedService.url, textToSend);
     }
@@ -275,7 +266,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     const tab = await getCurrentTab();
     if (!tab.url) throw new Error('No URL found');
-    
+
     const videoId = new URL(tab.url).searchParams.get('v');
     if (!videoId) {
       throw new Error('No YouTube video detected');
@@ -304,22 +295,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
       let textToCopy = transcriptText;
-      
+
       const template = await getPromptTemplate(selectedPromptId);
       if (template) {
         textToCopy = template.replace('{{transcript}}', transcriptText);
       }
-      
+
       const success = await copyToClipboard(textToCopy);
       copyWithPromptButton.textContent = success ? 'Copied!' : 'Failed to copy';
       setTimeout(() => {
         copyWithPromptButton.textContent = 'Copy with Prompt';
       }, 2000);
     });
-
   } catch (error) {
     container.innerHTML = `<div class="error">${error instanceof Error ? error.message : 'Unknown error'}</div>`;
     llmSelect.disabled = true;
     openLLMButton.disabled = true;
   }
-}); 
+});

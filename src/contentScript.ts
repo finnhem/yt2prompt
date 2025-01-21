@@ -22,7 +22,7 @@ class YouTubePageObserver {
       if (newVideoId) {
         const message: VideoChangedMessage = {
           type: 'VIDEO_CHANGED',
-          videoId: newVideoId
+          videoId: newVideoId,
         };
         chrome.runtime.sendMessage(message).catch((error: Error) => {
           console.error('Error sending video change message:', error);
@@ -35,14 +35,14 @@ class YouTubePageObserver {
     // Observe changes to the URL (YouTube uses History API)
     this.observer.observe(document.body, {
       childList: true,
-      subtree: true
+      subtree: true,
     });
 
     // Handle initial video
     if (this.currentVideoId) {
       const message: VideoChangedMessage = {
         type: 'VIDEO_CHANGED',
-        videoId: this.currentVideoId
+        videoId: this.currentVideoId,
       };
       chrome.runtime.sendMessage(message).catch((error: Error) => {
         console.error('Error sending initial video message:', error);
@@ -56,4 +56,4 @@ class YouTubePageObserver {
 }
 
 // Initialize the observer
-const observer = new YouTubePageObserver(); 
+const observer = new YouTubePageObserver();

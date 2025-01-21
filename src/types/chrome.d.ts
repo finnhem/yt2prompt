@@ -3,7 +3,7 @@ declare namespace chrome.runtime {
   export function connect(connectInfo?: { name?: string }): Port;
   export function getManifest(): chrome.runtime.Manifest;
   export function getURL(path: string): string;
-  
+
   export interface MessageSender {
     tab?: chrome.tabs.Tab;
     frameId?: number;
@@ -69,12 +69,9 @@ declare namespace chrome.tabs {
     active?: boolean;
   }): Promise<Tab>;
 
-  export function sendMessage<T = unknown, R = unknown>(
-    tabId: number,
-    message: T
-  ): Promise<R>;
+  export function sendMessage<T = unknown, R = unknown>(tabId: number, message: T): Promise<R>;
 }
 
 declare namespace chrome {
   export { runtime, tabs, storage };
-} 
+}

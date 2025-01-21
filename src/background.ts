@@ -13,10 +13,10 @@ chrome.runtime.onMessage.addListener(((
 ): boolean => {
   // Type check the message
   const typedMessage = message as Message;
-  
+
   if (isVideoChangedMessage(typedMessage)) {
     // Handle video change event if needed
     console.log('Video changed:', typedMessage.videoId);
   }
   return true; // Keep the message channel open for sendResponse
-}) as chrome.runtime.MessageCallback); 
+}) as chrome.runtime.MessageCallback);

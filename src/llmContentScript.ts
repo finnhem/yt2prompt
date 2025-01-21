@@ -7,7 +7,7 @@ const setTextAreaValue = (textarea: HTMLTextAreaElement | HTMLElement, text: str
   } else {
     textarea.textContent = text;
   }
-  
+
   textarea.dispatchEvent(new Event('input', { bubbles: true }));
   // Some interfaces need focus and blur events
   textarea.focus();
@@ -19,7 +19,7 @@ const SERVICE_SELECTORS: Record<LLMServiceHostname, string> = {
   'chat.deepseek.com': 'textarea',
   'chat.openai.com': '#prompt-textarea',
   'claude.ai': '[role="textbox"]',
-  'gemini.google.com': 'textarea'
+  'gemini.google.com': 'textarea',
 };
 
 // Handle text pasting for a specific service
@@ -38,23 +38,25 @@ const handleServicePaste = (hostname: LLMServiceHostname, text: string): void =>
 };
 
 // Listen for messages from the extension
-chrome.runtime.onMessage.addListener((
-  message,
-  sender: chrome.runtime.MessageSender,
-  sendResponse: (response: PasteTextResponse) => void
-): boolean => {
-  // Type guard to validate message is PasteTextRequest
-  const request = message as PasteTextRequest;
-  if (request.action === 'pasteText') {
-    const hostname = window.location.hostname as LLMServiceHostname;
-    
-    if (hostname in SERVICE_SELECTORS) {
-      handleServicePaste(hostname, request.text);
-      sendResponse({ success: true });
-    } else {
-      console.error('Unsupported LLM service:', hostname);
-      sendResponse({ success: false });
+chrome.runtime.onMessage.addListener(
+  (
+    message,
+    sender: chrome.runtime.MessageSender,
+    sendResponse: (response: PasteTextResponse) => void
+  ): boolean => {
+    // Type guard to validate message is PasteTextRequest
+    const request = message as PasteTextRequest;
+    if (request.action === 'pasteText') {
+      const hostname = window.location.hostname as LLMServiceHostname;
+
+      if (hostname in SERVICE_SELECTORS) {
+        handleServicePaste(hostname, request.text);
+        sendResponse({ success: true });
+      } else {
+        console.error('Unsupported LLM service:', hostname);
+        sendResponse({ success: false });
+      }
     }
+    return true; // Keep the message channel open for sendResponse
   }
-  return true; // Keep the message channel open for sendResponse
-}); 
+);

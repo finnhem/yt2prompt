@@ -24,20 +24,25 @@
     "https://claude.ai/*",
     "https://gemini.google.com/*"
   ],
-  "content_scripts": [{
-    "matches": ["*://*.youtube.com/watch?v=*"],
-    "js": ["contentScript.js"]
-  }, {
-    "matches": [
-      "https://chat.deepseek.com/*",
-      "https://chat.openai.com/*",
-      "https://claude.ai/*",
-      "https://gemini.google.com/*"
-    ],
-    "js": ["llmContentScript.js"]
-  }],
-  "web_accessible_resources": [{
-    "resources": ["config.json", "prompts/*.xml"],
-    "matches": ["<all_urls>"]
-  }]
-} 
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/watch?v=*"],
+      "js": ["contentScript.js"]
+    },
+    {
+      "matches": [
+        "https://chat.deepseek.com/*",
+        "https://chat.openai.com/*",
+        "https://claude.ai/*",
+        "https://gemini.google.com/*"
+      ],
+      "js": ["llmContentScript.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["config.json", "prompts/*.xml"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
