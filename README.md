@@ -41,7 +41,6 @@ npm install
 npm run build
 ```
 
-
 ### Loading in Chrome
 1. Open Chrome and navigate to `chrome://extensions/`
 2. Enable "Developer mode" in the top right
@@ -88,18 +87,36 @@ Creates comprehensive summaries while preserving:
 ```
 yt2prompt/
 ├── src/
-│   ├── contentScript.js    # YouTube page script
-│   ├── llmContentScript.js # AI services integration
-│   └── popup.js           # Extension popup logic
-├── popup.html             # Extension popup UI
-├── prompts.json          # Prompt templates and services
-├── manifest.json         # Extension configuration
-└── package.json         # Project dependencies
+│   ├── contentScript.ts     # YouTube page script
+│   ├── llmContentScript.ts  # AI services integration
+│   ├── popup.ts            # Extension popup logic
+│   └── types/             # TypeScript type definitions
+├── dist/                  # Built extension files
+├── prompts/              # XML prompt templates
+├── icons/               # Extension icons
+├── manifest.json        # Extension configuration
+└── package.json        # Project dependencies
 ```
 
-### Building
+### Building and Development
 - Development build: `npm run build`
 - Watch mode: `npm run watch`
+- Type checking: `npm run type-check`
+- Format code: `npm run format:write`
+- Lint code: `npm run lint:fix`
+- Check both format and lint: `npm run check:fix`
+
+### Code Quality
+The project uses several tools to maintain code quality:
+- **TypeScript** for type safety
+- **Biome** for formatting and linting
+- **Husky** for git hooks
+- **lint-staged** for running checks on staged files
+
+Pre-commit hooks will automatically:
+- Format staged TypeScript files
+- Run linting checks
+- Fix auto-fixable issues
 
 ### Adding New Features
 
@@ -118,15 +135,7 @@ yt2prompt/
 ```
 
 #### Adding a New Prompt Template
-Add to the `prompts` array in `prompts.json`:
-```json
-{
-  "id": "new-prompt",
-  "name": "Prompt Name",
-  "template": "Your prompt template here... {transcript}"
-}
-```
-
+Add your prompt template as an XML file in the `prompts` directory following the existing templates' structure.
 
 ## License
 
@@ -135,5 +144,6 @@ MIT License
 ## Acknowledgments
 
 - Uses the `youtube-transcript` package for transcript extraction
-- Built with Parcel bundler
+- Built with rspack
+- Code quality tools: Biome, Husky, lint-staged
 - Inspired by the need for better YouTube content analysis
